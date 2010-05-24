@@ -254,15 +254,9 @@ protected
   end
 
   def load_css_from_local_file!(path)
-    css_block = ''
-    begin
-      File.open(path, "r") do |file|
-        while line = file.gets
-          css_block << line
-        end
-      end
-      @css_parser.add_block!(css_block, {:base_uri => @html_file})
-    rescue; end
+    css_block = Tilt[path] ? Tilt.new(path).render : File.read(path)
+    @css_parser.add_block!(css_block, {:base_uri => @html_file})
+  rescue
   end
 
   def load_css_from_options! # :nodoc:

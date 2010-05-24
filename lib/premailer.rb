@@ -3,6 +3,7 @@ require 'yaml'
 require 'open-uri'
 require 'hpricot'
 require 'css_parser'
+require 'tilt'
 
 require File.dirname(__FILE__) + "/premailer/html_to_plain_text"
 require File.dirname(__FILE__) + "/premailer/premailer"
