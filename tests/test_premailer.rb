@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
 require File.dirname(__FILE__) + '/test_helper'
 require 'webrick'
 
@@ -41,6 +43,7 @@ class TestPremailer < Test::Unit::TestCase
 
 
   def test_related_attributes
+    flunk 'Not implemented'
     local_setup
     
     # h1 { text-align: center; }
@@ -63,7 +66,7 @@ class TestPremailer < Test::Unit::TestCase
   end
 
   def test_merging_cellpadding
-    flunk
+    flunk 'Not implemented'
     local_setup('cellpadding.html', {:prefer_cellpadding => true})
     assert_equal '0', @doc.at('#t1')['cellpadding']
     assert_match /padding\:/i, @doc.at('#t1 td')['style']
@@ -80,10 +83,27 @@ class TestPremailer < Test::Unit::TestCase
   end
   
   def test_preserving_media_queries
+    flunk 'Not implemented'
     local_setup
     assert_match /display\: none/i, @doc.at('#iphone')['style']
   end
   
+  def test_local_remote_check
+    assert Premailer.local_data?( StringIO.new('a') )
+    assert Premailer.local_data?( '/path/' )
+    assert !Premailer.local_data?( 'http://example.com/path/' )
+    
+    # the old way is deprecated but should still work
+    premailer = Premailer.new( StringIO.new('a') )
+    assert premailer.local_uri?( '/path/' )
+  end
+  
+  def test_initialize_can_accept_io_object
+    io = StringIO.new('hi mom')
+    premailer = Premailer.new(io)
+    assert_equal premailer.to_inline_css, 'hi mom'
+  end
+
 protected
   def local_setup(f = 'base.html', opts = {})
     base_file = File.dirname(__FILE__) + '/files/' + f
